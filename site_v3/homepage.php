@@ -12,7 +12,7 @@ this work. Tony Petrotte CSC155-201F_2021SP -->
 
 <body>
     <?php getheader(); ?>
-    <?php getnavbar(); ?>
+    <?php getnavbar($pdo); ?>
     <section>
         <h1><b>Welcome To This Goofy Fruit Site!</b></h1>
         <hr>

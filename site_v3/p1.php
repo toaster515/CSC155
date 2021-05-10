@@ -31,7 +31,7 @@ Tony Petrotte CSC155-201F_2021SP -->
 <body>
 
 <?php getheader(); ?>
-<?php getnavbar(); ?> 
+<?php getnavbar($pdo); ?> 
 <h2>Apples</h2> 
 
 <div class="fruit" id="apple">

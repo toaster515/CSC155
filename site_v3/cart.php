@@ -15,11 +15,27 @@ Tony Petrotte CSC155-201F_2021SP -->
 		$_SESSION['bananas']=0;
 		$_SESSION['mangos']=0;
 	}
-	function cartlogic(){
+	function fruitcheck(){
+		if ($_SESSION['apples']==0 && $_SESSION['oranges']==0 && $_SESSION['bananas']==0 && $_SESSION['mangos']==0){
+			return 0;
+		}else{
+			return 1;
+		}
+	}
+	function cartlogic($pdo){
 		if (isset($_POST['cart'])){
 			if ($_POST['cart']=='Place Order'){
-				echo "Let's pretend like you'll actually get these";
-				clearcart();
+				$chk = fruitcheck();
+				if ($chk==1){
+					echo "Order Placed: Let's pretend like you'll actually get these";
+					date_default_timezone_set('America/Chicago');
+					$datetime = date('Y/m/d H:i:s');
+					$arr = array($_SESSION['username'], $datetime, $_SESSION['apples'], $_SESSION['oranges'], $_SESSION['bananas'], $_SESSION['mangos']);
+					db_placeorder($pdo, $arr);
+					clearcart();
+				} else{
+					echo "There isn't anything in your cart... you do know how this works right?";
+				}
 			} elseif($_POST['cart']=='Clear Cart'){
 				echo "Cart cleared";
 				clearcart();
@@ -40,14 +56,14 @@ Tony Petrotte CSC155-201F_2021SP -->
 <body> 
 
 <?php getheader(); ?>
-<?php getnavbar(); ?> 
+<?php getnavbar($pdo); ?> 
 <h2>Checkout</h2> 
 <h4>Your Fruit Basket:</h4>
 <hr>
 <div class="fruit" id="fruitcart">
 <div class="cart-box">
 <?php
-	cartlogic();
+	cartlogic($pdo);
 	echo "<p>";
 	print_r($_SESSION['apples']);
 	echo "  apples in the basket<br>";

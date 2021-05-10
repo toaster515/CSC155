@@ -3,6 +3,9 @@ this work.
 Tony Petrotte CSC155-201F_2021SP -->
 
 <?php 
+require('estconn.php');
+require('dbfunc.php');
+
 function logcheck(){
     if(!isset($_SESSION['username'])){
         header('Location: http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/login.php');
@@ -38,7 +41,11 @@ echo <<<'EOT'
 EOT;
 }
 
-function getnavbar(){  
+function getnavbar($pdo){  
+
+$g = db_getgroup($pdo, $_SESSION['username']);
+
+if ($g=='user'){
 echo <<<'EOT'
 <ul>
     <li><a class="activehead" href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/homepage.php">Home</a></li>
@@ -50,6 +57,21 @@ echo <<<'EOT'
     <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/gbpage.php">Logout</a></li> 
 </ul> 
 EOT;
+}elseif ($g=='admin'){
+echo <<<'EOT'
+<ul>
+    <li><a class="activehead" href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/homepage.php">Home</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/p1.php">Page1</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/p2.php">Page2</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/p3.php">Page3</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/p4.php">Page4</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/cart.php">Cart</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/admin.php">Admin</a></li>
+    <li><a href="http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/gbpage.php">Logout</a></li> 
+</ul> 
+EOT;
+}
+
 }
 
 function usrname_form(){
@@ -100,9 +122,37 @@ echo <<<'EOT'
 EOT;
 }
 
+function print_orders($pdo){
+
+    $orders = db_adminorders($pdo);
+    $z = count($orders);
+    echo "<table>";
+    echo "<tr><th>ID</th><th>Username</th><th>Order Date</th><th>Apples</th><th>Oranges</th><th>Bananas</th><th>Mangos</th></tr>";
+
+    for ($x=0; $x<$z; $x++){
+        echo "<tr>";
+        
+        echo "<td>".$orders[$x]['id']."</td>";
+        echo "<td>".$orders[$x]['username']."</td>";
+        echo "<td>".$orders[$x]['date']."</td>";
+        echo "<td>".$orders[$x]['apples']."</td>";
+        echo "<td>".$orders[$x]['oranges']."</td>";
+        echo "<td>".$orders[$x]['bananas']."</td>";
+        echo "<td>".$orders[$x]['mangos']."</td>";
+        
+        echo "</tr>";
+    }
+    echo "</table>";
+
+
+}
+
 function getstyle(){ 
 echo <<<'EOT'
 <style>
+    table, th, td{
+        border: 1px solid black;
+    }
     div {
         float: left;
         font-family: Tahoma, Verdana, Segoe, sans-serif;

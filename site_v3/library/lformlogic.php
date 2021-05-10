@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
         }
 
     } elseif ($_POST['submit'] == 'Forgot Password?'){
-        echo "It's 'password'";
+        echo "WELP TOUGH";
     } elseif ($_POST['submit'] == 'Register'){
         header('Location: http://www.csit.parkland.edu/~apetrotte1/csc155/site_v3/NewUser.php');
     }

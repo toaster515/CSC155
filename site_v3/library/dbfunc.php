@@ -10,6 +10,12 @@ function db_getpass($pdo, $usr){
 	$p_cryp = $stmt->fetchColumn();
 	return $p_cryp;
 }
+function db_getgroup($pdo, $usr){
+	$stmt = $pdo->prepare("SELECT usergroup FROM fruitsiteUsers WHERE username= ?");
+	$stmt->execute([$usr]);
+	$ug = $stmt->fetchColumn();
+	return $ug;
+}
 
 function db_checkUsr($pdo, $usr){
 	if (!strlen($usr)==0){
@@ -41,7 +47,17 @@ function db_setUsr($pdo, $usr, $pswrd, $email, $groupnum){
 	} elseif($c==2){
 		echo "Something is wrong";
 	}
+}
+function db_placeorder($pdo, $arrs){
+	$stmt = $pdo->prepare("INSERT INTO fruitorders SET username= ?, date=?, apples=?, oranges=?, bananas=?, mangos=?");
+	$stmt->execute($arrs);
+}
 
+function db_adminorders($pdo){
+    $stmt = $pdo->prepare("SELECT * FROM fruitorders");
+	$stmt->execute();
+	$arrs = $stmt->fetchALL();
+	return $arrs;
 }
 
 ?>
